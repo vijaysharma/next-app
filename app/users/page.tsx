@@ -1,14 +1,26 @@
-import React, { cache } from 'react';
+import Link from 'next/link';
+import React from 'react';
+import { sort } from 'fast-sort';
 
 interface User {
   id: number;
   name: string;
   email: string;
 }
-
-const UserPage = async () => {
+interface Props {
+  searchParams: {
+    sortOrder: string;
+  };
+}
+const UserPage = async ({ searchParams: { sortOrder } }: Props) => {
   const usersJson = await fetch('https://jsonplaceholder.typicode.com/users');
   const users: User[] = await usersJson.json();
+
+  // add sort logic
+  const usersSorted =
+    sortOrder === 'email'
+      ? sort(users).asc((user) => user.email)
+      : sort(users).asc((user) => user.name);
 
   const wordsJson = await fetch(
     'https://random-word-api.vercel.app/api?words=10'
@@ -21,12 +33,16 @@ const UserPage = async () => {
       <table className="table table-fixed table-zebra">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
+            <th>
+              <Link href="/users?sortOrder=name">Name</Link>
+            </th>
+            <th>
+              <Link href="/users?sortOrder=email">Email</Link>
+            </th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {usersSorted.map((user) => (
             <tr>
               <td>{user.name}</td>
               <td>{user.email}</td>
@@ -34,11 +50,6 @@ const UserPage = async () => {
           ))}
         </tbody>
       </table>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
       <hr />
       <h2>10 Words</h2>
       <ul>
