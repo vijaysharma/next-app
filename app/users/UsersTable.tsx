@@ -23,7 +23,7 @@ const UsersTable = async ({ sortBy }: SortBy) => {
 
   return (
     <>
-      <h2>Users</h2>
+      <h1>Users</h1>
       <table className="table table-fixed table-zebra">
         <thead>
           <tr>

@@ -7,7 +7,7 @@ const Words = async () => {
   const words: [] = await wordsJson.json();
   return (
     <>
-      <h2>10 Words</h2>
+      <h1>Random Words</h1>
       {words.map((word) => (
         <div className="stack">
           <div className="text-center border border-base-content card w-36 bg-base-100">
