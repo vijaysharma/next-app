@@ -12,7 +12,10 @@ interface SortBy {
 }
 
 const UsersTable = async ({ sortBy }: SortBy) => {
-  const usersJson = await fetch('https://jsonplaceholder.typicode.com/users');
+  const usersJson = await fetch('http://localhost:3000/api/users', {
+    cache: 'no-store'
+  });
+
   const users: User[] = await usersJson.json();
 
   // add sort logic
@@ -24,6 +27,9 @@ const UsersTable = async ({ sortBy }: SortBy) => {
   return (
     <>
       <h1>Users</h1>
+      <Link href="/users/new" className="btn btn-primary">
+        New User
+      </Link>
       <table className="table table-fixed table-zebra">
         <thead>
           <tr>
@@ -37,8 +43,10 @@ const UsersTable = async ({ sortBy }: SortBy) => {
         </thead>
         <tbody>
           {usersSorted.map((user) => (
-            <tr>
-              <td>{user.name}</td>
+            <tr key={user.id}>
+              <td>
+                <Link href={`/users/${user.id}`}>{user.name}</Link>
+              </td>
               <td>{user.email}</td>
             </tr>
           ))}
