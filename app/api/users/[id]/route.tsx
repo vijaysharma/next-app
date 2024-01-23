@@ -1,19 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { data } from '../userData';
 import schema from '../schema';
+import prisma from '../../../../prisma/client';
 
-export function GET(
+// export function GET(
+//   request: NextRequest,
+//   { params: { id } }: { params: { id: string } }
+// ) {
+//   const paramId = parseInt(id);
+//   if (paramId > 10)
+//     return NextResponse.json(
+//       { error: `User not found for the given id = ${id}` },
+//       { status: 404 }
+//     );
+//   const user = data.filter((u: any) => parseInt(u.id) === paramId);
+//   return NextResponse.json(user[0], { status: 200 });
+// }
+
+export async function GET(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
   const paramId = parseInt(id);
-  if (paramId > 10)
-    return NextResponse.json(
-      { error: `User not found for the given id = ${id}` },
-      { status: 404 }
-    );
-  const user = data.filter((u: any) => parseInt(u.id) === paramId);
-  return NextResponse.json(user[0], { status: 200 });
+  const user = await prisma.user.findUnique({
+    where: { id: paramId }
+  });
+  if (!user)
+    return NextResponse.json({ error: `User not found` }, { status: 404 });
+  return NextResponse.json(user, { status: 200 });
 }
 
 // Use PUT for replacing an object
