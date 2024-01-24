@@ -11,27 +11,15 @@ interface User {
   name: string;
   username: string;
   email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
   phone: string;
   website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
+  company: string;
 }
 
 const UserDetails = async ({ params: { id } }: Props) => {
-  const userJson = await fetch(`http://localhost:3000/api/users/${id}`);
+  const userJson = await fetch(`http://localhost:3000/api/users/${id}`, {
+    cache: 'no-store'
+  });
   const user: User = await userJson.json();
 
   return (
@@ -59,7 +47,7 @@ const UserDetails = async ({ params: { id } }: Props) => {
       </p>
       <p>
         <strong>Company: </strong>
-        {user.company.name}
+        {user.company}
       </p>
     </>
   );

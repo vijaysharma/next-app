@@ -13,8 +13,18 @@ datasource db {
 model User {
   id           Int      @id @default(autoincrement())
   email        String   @unique
-  name         String
+  username     String   @unique
+  name         String   @default("Anonymous")
+  phone        String   @default("0000000000")
+  company      String   @default("ABC Compnay")
   followers    Int      @default(0)
   isActive     Boolean  @default(true)
   registeredAt DateTime @default(now())
+  isAdmin      Boolean  @default(false)
+}
+
+model Product {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  price Float
 }
